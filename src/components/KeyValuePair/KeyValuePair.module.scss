@@ -1,0 +1,42 @@
+.container {
+  .header {
+    .head {
+      padding: 17px 14px;
+      flex-grow: 1;
+    }
+    .iconContainer {
+      color: #0052ff;
+      border-left: none;
+    }
+  }
+
+  .row {
+    border-top: 1px solid #e3e6e8;
+    .input {
+      padding: 13px 14px;
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      box-sizing: border-box;
+      border: none;
+      font-size: 16px;
+      outline: none;
+      &:first-child {
+        border-right: 1px solid #e3e6e8;
+      }
+      &::placeholder {
+        color: #e3e5e8;
+      }
+    }
+    &:last-child {
+      .input {
+        border-bottom: none;
+      }
+    }
+  }
+  .iconContainer {
+    flex-grow: 0;
+    min-width: 53px;
+    border-left: 1px solid #e3e6e8;
+  }
+}

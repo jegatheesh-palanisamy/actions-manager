@@ -1,0 +1,44 @@
+.container {
+  display: inline-block;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #e3e6e8;
+  input {
+    width: 200%;
+    height: 200%;
+    margin: 0;
+    transform: translate(-5px, -5px);
+    &::after {
+      width: 24px;
+      height: 24px;
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    &:checked {
+      &::after {
+        background-color: #0052ff;
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 5px;
+        top: 12px;
+        left: 10px;
+        z-index: 2;
+        border-left: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}

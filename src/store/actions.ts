@@ -2,15 +2,16 @@ const ADD_ACTION = 'ADD_ACTION';
 const UPDATE_ACTION = 'UPDATE_ACTION';
 const DELETE_ACTION_BY_ID = 'DELETE_ACTION_BY_ID';
 const SWAP_ACTIONS = 'SWAP_ACTIONS';
-const DEACTIVATE_ACTION = 'DEACTIVATE_ACTION';
-
+const TOGGLE_ISACTIVE_STATUS = 'TOGGLE_ISACTIVE_STATUS';
+const CHANGE_VIEW = 'CHANGE_VIEW';
+const SELECT_ACTION = 'SELECT_ACTION';
 
 /**
  * Action creator for adding an action
  * @param payload action to be added
  * @returns {IAddAction}
  */
-export const addAction = (payload: ActiveActionType): IAddAction => ({
+export const addActions = (payload: IAction | IAction[]): IAddAction => ({
   type: ADD_ACTION,
   payload
 });
@@ -24,7 +25,6 @@ export const updateAction = (payload: ActiveActionType): IUpdateAction => ({
   type: UPDATE_ACTION,
   payload
 });
-
 
 /**
  * Action creator for delete actions
@@ -47,18 +47,38 @@ export const swapActions = (payload: [ActiveActionType, ActiveActionType]): ISwa
 });
 
 /**
- * Action creator for deactivate action
- * @param payload id of the action to be deactivated
- * @returns {IDeactivateAction}
+ * Action creator for toggle the isActive status of an action
+ * @param payload id of the action to be toggled
+ * @returns {IToggleIsActiveAction}
  */
-export const deactivateActionById = (payload: number): IDeactivateAction => ({
-  type: DEACTIVATE_ACTION,
+export const toggleActiveStatusById = (payload: number): IToggleIsActiveAction => ({
+  type: TOGGLE_ISACTIVE_STATUS,
   payload
 });
 
+/**
+ * Action creator for changing view
+ * @param payload 
+ * @returns 
+ */
+export const changeView = (payload: typeof views[keyof typeof views]): IChangeView => ({
+  type: CHANGE_VIEW,
+  payload
+})
+
+/**
+ * Action creator for changing view
+ * @param payload 
+ * @returns 
+ */
+export const selectAction = (payload: ActiveActionType): ISelectAction => ({
+  type: SELECT_ACTION,
+  payload
+})
+
 interface IAddAction {
   type: typeof ADD_ACTION,
-  payload: ActiveActionType;
+  payload: IAction | IAction[];
 }
 
 interface IUpdateAction {
@@ -76,22 +96,35 @@ interface ISwapActions {
   payload: [ActiveActionType, ActiveActionType]
 }
 
-interface IDeactivateAction {
-  type: typeof DEACTIVATE_ACTION,
+interface IToggleIsActiveAction {
+  type: typeof TOGGLE_ISACTIVE_STATUS,
   payload: number;
 }
 
-type ReducerActionType = IAddAction | IUpdateAction | IDeleteAction | ISwapActions | IDeactivateAction;
+interface IChangeView {
+  type: typeof CHANGE_VIEW;
+  payload: typeof views[keyof typeof views]
+}
 
-interface IAction {
+interface ISelectAction {
+  type: typeof SELECT_ACTION;
+  payload: ActiveActionType;
+}
+
+
+
+type ReducerActionType = IAddAction | IUpdateAction | IDeleteAction | ISwapActions | IToggleIsActiveAction | IChangeView | ISelectAction;
+
+export interface IAction {
   readonly name: string;
-  readonly iconClassName: string;
+  readonly icon: string;
 }
 
 interface IActiveAction extends IAction {
   id: number;
   order: number;
   isActive: boolean;
+  updatedAt?: number;
 }
 
 interface ITag {
@@ -100,31 +133,39 @@ interface ITag {
 }
 
 export interface ITagAction extends IActiveAction {
-  tags: ITag[];
+  tags?: ITag[];
 }
 
 export interface IHttpReqAction extends IActiveAction {
-  url: string;
-  method: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
+  url?: string;
+  method?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
+  body?: string;
+  keyValPair?: [string, string][]
 }
 
-type ActiveActionType = ITagAction | IHttpReqAction;
+export type ActiveActionType = ITagAction | IHttpReqAction;
 
-interface IActionState {
-  allActions: IAction[];
+export interface IActionState {
   activeActions: ActiveActionType[];
+  view: typeof views[keyof typeof views];
+  selectedAction: null | ActiveActionType;
 }
 
-const actions = {
-  tag: { name: 'Add Tag', iconClassName: 'tag' },
-  httpReq: { name: 'HTTP Request', iconClassName: 'tag' },
+export const views = {
+  actionsSelector: 'actions-selector',
+  activeActions: 'actions',
+  configureAction: 'action-config'
+}
+
+export const nativeActions = {
+  tag: { name: 'Tag customer', icon: 'fas fa-tag' },
+  httpReq: { name: 'Make HTTP Request', icon: 'fas fa-exchange-alt' },
 };
 
-const allActions = Object.values(actions);
-
 const initialState: IActionState = {
-  allActions,
-  activeActions: []
+  activeActions: [],
+  view: 'actions',
+  selectedAction: null
 };
 
 const reducer = (state: IActionState = initialState, action: ReducerActionType): IActionState => {
@@ -132,12 +173,16 @@ const reducer = (state: IActionState = initialState, action: ReducerActionType):
     case ADD_ACTION:
       return {
         ...state,
-        activeActions: [...state.activeActions, action.payload]
+        activeActions: [
+          ...state.activeActions,
+          ...(action.payload instanceof Array ? action.payload.map((data, i) => constructActionObj(data, state.activeActions.length + i))
+            : [constructActionObj(action.payload, state.activeActions.length)])
+        ]
       }
     case UPDATE_ACTION:
       return {
         ...state,
-        activeActions: [...state.activeActions.filter(({ id }) => id !== action.payload.id), action.payload]
+        activeActions: [...state.activeActions.filter(({ id }) => id !== action.payload.id), { ...action.payload, updatedAt: new Date().getTime() }]
       }
     case SWAP_ACTIONS:
       return {
@@ -156,10 +201,20 @@ const reducer = (state: IActionState = initialState, action: ReducerActionType):
         ...state,
         activeActions: [...state.activeActions.filter(({ id }) => id !== action.payload)]
       }
-    case DEACTIVATE_ACTION:
+    case TOGGLE_ISACTIVE_STATUS:
       return {
         ...state,
-        activeActions: state.activeActions.map((currentAction) => currentAction.id === action.payload ? { ...currentAction, isActive: false } : currentAction)
+        activeActions: state.activeActions.map((currentAction) => currentAction.id === action.payload ? { ...currentAction, isActive: !currentAction.isActive } : currentAction)
+      };
+    case CHANGE_VIEW:
+      return {
+        ...state,
+        view: action.payload
+      };
+    case SELECT_ACTION:
+      return {
+        ...state,
+        selectedAction: action.payload
       };
     default:
       return state;
@@ -173,8 +228,8 @@ export default reducer;
  * @param data 
  * @returns 
  */
-export const createHttpReqAction = (data: Omit<IHttpReqAction, keyof IAction | 'isActive'>): IHttpReqAction => ({
-  ...actions.httpReq, ...data, isActive: true
+export const createHttpReqAction = (data: IAction, existingActionsLength: number): IHttpReqAction => ({
+  ...nativeActions.httpReq, ...data, isActive: true, id: existingActionsLength, order: existingActionsLength
 });
 
 /**
@@ -182,6 +237,22 @@ export const createHttpReqAction = (data: Omit<IHttpReqAction, keyof IAction | '
  * @param data 
  * @returns 
  */
-export const createTagAction = (data: Omit<ITagAction, keyof IAction | 'isActive'>): ITagAction => ({
-  ...actions.tag, ...data, isActive: true
+export const createTagAction = (data: IAction, existingActionsLength: number): ITagAction => ({
+  ...nativeActions.tag, ...data, isActive: true, tags: [], id: existingActionsLength, order: existingActionsLength
 });
+
+/**
+ * 
+ * @param action 
+ * @param existingActionsLength 
+ * @returns 
+ */
+export const constructActionObj = (action: IAction, existingActionsLength: number): ActiveActionType => {
+  switch (action.name) {
+    case nativeActions.tag.name:
+      return createTagAction(action, existingActionsLength);
+    case nativeActions.httpReq.name:
+    default:
+      return createHttpReqAction(action, existingActionsLength);
+  }
+}

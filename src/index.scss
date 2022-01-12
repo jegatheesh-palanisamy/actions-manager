@@ -1,9 +1,45 @@
-@import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
+// @import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+@font-face {
+  font-family: Inter;
+  src: url('../public/Inter/static/Inter-Light.ttf');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url('../public/Inter/static/Inter-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url('../public/Inter/static/Inter-Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url('../public/Inter/static/Inter-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url('../public/Inter/static/Inter-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -12,4 +48,297 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+// cursor
+.pointer {
+  cursor: pointer;
+}
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-5 {
+  margin-right: 5px;
+}
+
+.mr-14 {
+  margin-right: 14px;
+}
+
+.mr-16 {
+  margin-right: 16px;
+}
+
+.mr-22 {
+  margin-right: 22px;
+}
+
+.ml-n-22 {
+  margin-left: -22px;
+}
+
+.mr-n-22 {
+  margin-right: -22px;
+}
+
+.mb-4 {
+  margin-bottom: 4px;
+}
+
+.mb-14 {
+  margin-bottom: 14px;
+}
+
+.mb-n-14 {
+  margin-bottom: -14px;
+}
+
+.mb-22 {
+  margin-bottom: 22px;
+}
+
+.mb-n-22 {
+  margin-bottom: -22px;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+
+// Padding
+.p-0 {
+  padding: 0;
+}
+
+.pt-7 {
+  padding-top: 7px;
+}
+
+.pb-7 {
+  padding-bottom: 7px;
+}
+
+.pt-14 {
+  padding-top: 14px;
+}
+
+.pb-14 {
+  padding-bottom: 14px;
+}
+
+.pl-14 {
+  padding-left: 14px;
+}
+
+.pr-14 {
+  padding-right: 14px;
+}
+
+.p-22 {
+  padding: 22px;
+}
+
+.pl-22 {
+  padding-left: 22px;
+}
+.pr-22 {
+  padding-right: 22px;
+}
+
+.p-24 {
+  padding: 24px;
+}
+
+.pt-27 {
+  padding-top: 27px;
+}
+
+.pb-27 {
+  padding-bottom: 27px;
+}
+
+.pl-40 {
+  padding-left: 40px;
+}
+
+.pr-40 {
+  padding-right: 40px;
+}
+
+.pl-45 {
+  padding-left: 45px;
+}
+
+// border radius
+.br-14 {
+  border-radius: 14px;
+}
+
+// line height
+.lh-20 {
+  line-height: 20px;
+}
+
+.color-primary {
+  color: #0052ff;
+}
+
+.color-danger {
+  color: #ff2d55;
+}
+
+.color-grey {
+  color: #475461;
+}
+
+.color-disabled {
+  color: #9da8b4;
+}
+
+.color-yellow {
+  color: #f9b506;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.fs-5 {
+  font-size: 5px;
+}
+
+.fs-10 {
+  font-size: 10px;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-stretch {
+  align-items: stretch;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.flex-basis-0 {
+  flex-basis: 0;
+}
+
+.btn {
+  min-width: 151px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  line-height: 20px;
+  border: 1px solid;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #0052ff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  border-color: #e3e6e8;
+  background-color: #fff;
+  color: #475461;
+  font-weight: 600;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.destyle-list {
+  list-style: none;
+}
+
+// background-color
+.bg-grey {
+  background-color: #f9f9f9;
+}
+
+// border
+.border-grey {
+  border: 1px solid #e3e6e8;
+}
+
+.border-bottom-grey {
+  border-bottom: 1px solid #e3e6e8;
+}
+
+.border-primary {
+  border: 1px solid #0052ff;
+}
+
+.border-danger {
+  border: 1px solid #ff2d55;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opacity-5 {
+  opacity: 0.5;
 }
